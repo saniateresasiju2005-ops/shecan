@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Submitted Messages</h1>
+
+  <div id="messagesContainer"></div>
+
+</div>
+
+<script>
+
+if(localStorage.getItem("isAdmin") !== "true"){
+
+  window.location.href = "login.html";
+
+}
+
+const messages =
+  JSON.parse(localStorage.getItem("messages")) || [];
+
+const container =
+  document.getElementById("messagesContainer");
+
+function displayMessages(){
+
+  container.innerHTML = "";
+
+  messages.forEach((msg, index) => {
+
+    const div = document.createElement("div");
+
+    div.classList.add("message-card");
+
+    div.innerHTML = `
+      <h3>${msg.name}</h3>
+      <p>${msg.email}</p>
+      <p>${msg.message}</p>
+
+      <button
+        class="delete-btn"
+        onclick="deleteMessage(${index})"
+      >
+        Delete
+      </button>
+    `;
+
+    container.appendChild(div);
+
+  });
+
+}
+
+function deleteMessage(index){
+
+  messages.splice(index, 1);
+
+  localStorage.setItem(
+    "messages",
+    JSON.stringify(messages)
+  );
+
+  displayMessages();
+
+}
+
+displayMessages();
+
+</script>
+
+</body>
+</html>
